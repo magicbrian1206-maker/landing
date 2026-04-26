@@ -200,6 +200,139 @@
 
   .meta { text-align: center; color: #6c6c70; font-size: 11px; margin-top: 12px; }
 
+  /* ===== 月曆 ===== */
+  .cal-card {
+    background: #1c1c1e;
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .cal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-head h3 {
+    font-size: 16px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .cal-nav {
+    display: flex; gap: 4px;
+  }
+  .cal-nav button {
+    width: 32px; height: 32px;
+    background: #2c2c2e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .cal-nav button:active { transform: scale(0.92); }
+  .cal-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .cal-weekdays {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    text-align: center; font-size: 11px;
+    color: #8e8e93; margin-bottom: 6px;
+  }
+  .cal-weekdays div { padding: 4px 0; }
+  .cal-weekdays div.weekend { color: #ff453a; }
+
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    position: relative;
+    transition: background 0.15s;
+  }
+  .cal-cell:active { transform: scale(0.92); }
+  .cal-cell.empty { cursor: default; pointer-events: none; }
+  .cal-cell.future { color: #3a3a3c; cursor: not-allowed; pointer-events: none; }
+  .cal-cell.today { color: #FFD500; }
+  .cal-cell:not(.empty):not(.future):hover { background: rgba(255,255,255,0.08); }
+  .cal-cell.selected {
+    background: linear-gradient(135deg, #FFD500, #FFB800);
+    color: #000;
+  }
+  .cal-cell.selected.today { color: #000; }
+  .cal-cell .activity {
+    position: absolute;
+    bottom: 4px;
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #FFD500;
+    box-shadow: 0 0 4px #FFD500;
+  }
+  .cal-cell.selected .activity { display: none; }
+
+  /* 日明細 */
+  .cal-detail {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .cal-detail .day-title {
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  .cal-detail .day-title .badge {
+    display: inline-block;
+    background: rgba(255,213,0,0.2);
+    color: #FFD500;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .cal-detail .day-rows {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .cal-detail .day-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 12px;
+    background: #2c2c2e;
+    border-radius: 10px;
+    border-left: 3px solid var(--gray-500);
+  }
+  .cal-detail .day-row.line   { border-left-color: var(--line); }
+  .cal-detail .day-row.fb     { border-left-color: var(--fb); }
+  .cal-detail .day-row.google { border-left-color: var(--google); }
+  .cal-detail .day-row .ic { font-size: 18px; width: 24px; text-align: center; }
+  .cal-detail .day-row .nm { flex: 1; font-size: 13px; color: #c7c7cc; }
+  .cal-detail .day-row .vl {
+    font-size: 17px; font-weight: 800;
+    font-feature-settings: "tnum";
+  }
+  .cal-detail .day-row.line   .vl { color: var(--line-2); }
+  .cal-detail .day-row.fb     .vl { color: var(--fb-2); }
+  .cal-detail .day-row.google .vl { color: var(--google-2); }
+  .cal-detail .day-row .vl .u { font-size: 11px; color: #8e8e93; font-weight: 500; margin-left: 2px; }
+  .cal-detail .day-total {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(255,213,0,0.15), rgba(255,184,0,0.05));
+    border-radius: 10px;
+    border: 1px solid rgba(255,213,0,0.2);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cal-detail .day-total .lb { font-size: 13px; color: #FFD500; font-weight: 600; }
+  .cal-detail .day-total .vl { font-size: 22px; font-weight: 800; color: #fff; font-feature-settings: "tnum"; }
+
   @keyframes bump {
     0% { transform: scale(1); }
     50% { transform: scale(1.18); color: #FFD500; }
@@ -307,6 +440,48 @@
   </div>
 
   <div class="meta" id="meta">資料載入中...</div>
+
+  <!-- ===== 月曆 ===== -->
+  <div class="cal-card">
+    <div class="cal-head">
+      <h3 id="cal-title">— —</h3>
+      <div class="cal-nav">
+        <button id="cal-prev" aria-label="上個月">‹</button>
+        <button id="cal-today" aria-label="今天" style="width:auto; padding:0 10px; font-size:12px;">今天</button>
+        <button id="cal-next" aria-label="下個月">›</button>
+      </div>
+    </div>
+
+    <div class="cal-weekdays">
+      <div class="weekend">日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div class="weekend">六</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+
+    <div class="cal-detail" id="cal-detail">
+      <div class="day-title" id="day-title">選擇日期查看明細</div>
+      <div class="day-rows">
+        <div class="day-row line">
+          <div class="ic">💬</div>
+          <div class="nm">加入 LINE 好友</div>
+          <div class="vl"><span id="dc-line">—</span><span class="u">次</span></div>
+        </div>
+        <div class="day-row fb">
+          <div class="ic">👍</div>
+          <div class="nm">FB 粉絲團按讚</div>
+          <div class="vl"><span id="dc-fb">—</span><span class="u">次</span></div>
+        </div>
+        <div class="day-row google">
+          <div class="ic">⭐</div>
+          <div class="nm">Google 五星好評</div>
+          <div class="vl"><span id="dc-google">—</span><span class="u">次</span></div>
+        </div>
+      </div>
+      <div class="day-total">
+        <div class="lb">當日總計</div>
+        <div class="vl" id="dc-total">—</div>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -495,6 +670,127 @@ async function loadAll(force=false){
 renderTabs();
 loadAll();
 setInterval(() => loadAll(true), 60000);
+
+// =============== 月曆 ===============
+let calYear, calMonth, selectedDate;
+
+function sameDay(a, b){
+  return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+}
+
+async function renderCalendar(){
+  const today = new Date();
+  const firstDay = new Date(calYear, calMonth, 1);
+  const lastDay = new Date(calYear, calMonth+1, 0);
+  const daysInMonth = lastDay.getDate();
+  const startDow = firstDay.getDay(); // 0=Sun
+
+  const monthNames = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  document.getElementById('cal-title').textContent = `${calYear} 年 ${monthNames[calMonth]}`;
+  document.getElementById('cal-next').disabled =
+    (calYear > today.getFullYear()) || (calYear === today.getFullYear() && calMonth >= today.getMonth());
+
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = '';
+
+  // 前置空格
+  for (let i = 0; i < startDow; i++) {
+    const el = document.createElement('div');
+    el.className = 'cal-cell empty';
+    grid.appendChild(el);
+  }
+
+  // 收集當月所有日期需要查詢的 keys，用於背景顯示活動點
+  const visibleDays = [];
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(calYear, calMonth, d);
+    const isFuture = date > today && !sameDay(date, today);
+    const isToday = sameDay(date, today);
+    const isSelected = selectedDate && sameDay(date, selectedDate);
+
+    const btn = document.createElement('button');
+    btn.className = 'cal-cell';
+    if (isFuture) btn.classList.add('future');
+    if (isToday) btn.classList.add('today');
+    if (isSelected) btn.classList.add('selected');
+    btn.textContent = d;
+    btn.dataset.day = d;
+
+    if (!isFuture) {
+      btn.addEventListener('click', () => selectDate(date));
+      visibleDays.push({ d, date, btn });
+    }
+    grid.appendChild(btn);
+  }
+
+  // 背景查詢每天總點擊數，顯示活動點
+  visibleDays.forEach(async ({d, date, btn}) => {
+    const key = `${date.getFullYear()}${pad(date.getMonth()+1)}${pad(date.getDate())}`;
+    const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${key}`)));
+    const total = counts.reduce((a,b)=>a+b, 0);
+    if (total > 0 && !btn.classList.contains('selected')) {
+      const dot = document.createElement('div');
+      dot.className = 'activity';
+      btn.appendChild(dot);
+    }
+  });
+}
+
+async function selectDate(date){
+  selectedDate = date;
+  // 重新渲染以更新選取狀態
+  await renderCalendar();
+  await loadDayDetail(date);
+}
+
+async function loadDayDetail(date){
+  const key = `${date.getFullYear()}${pad(date.getMonth()+1)}${pad(date.getDate())}`;
+  const wk = ['日','一','二','三','四','五','六'][date.getDay()];
+  const isToday = sameDay(date, new Date());
+  document.getElementById('day-title').innerHTML =
+    `${date.getMonth()+1} 月 ${date.getDate()} 日 <span style="color:#8e8e93;font-weight:500;font-size:14px;">星期${wk}</span>` +
+    (isToday ? ' <span class="badge">今天</span>' : '');
+
+  // 顯示載入中
+  ['line','fb','google'].forEach(b => document.getElementById(`dc-${b}`).textContent = '…');
+  document.getElementById('dc-total').textContent = '…';
+
+  const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${key}`)));
+  let total = 0;
+  BRANDS.forEach((b, i) => {
+    document.getElementById(`dc-${b}`).textContent = counts[i].toLocaleString();
+    total += counts[i];
+  });
+  document.getElementById('dc-total').textContent = total.toLocaleString() + ' 次';
+}
+
+document.getElementById('cal-prev').addEventListener('click', () => {
+  calMonth--;
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+});
+document.getElementById('cal-next').addEventListener('click', () => {
+  calMonth++;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  renderCalendar();
+});
+document.getElementById('cal-today').addEventListener('click', () => {
+  const t = new Date();
+  calYear = t.getFullYear();
+  calMonth = t.getMonth();
+  selectDate(t);
+});
+
+// 初始：顯示本月並預設選中今天
+(function initCalendar(){
+  const t = new Date();
+  calYear = t.getFullYear();
+  calMonth = t.getMonth();
+  selectedDate = t;
+  renderCalendar();
+  loadDayDetail(t);
+})();
 </script>
 </body>
 </html>
