@@ -837,6 +837,13 @@ async function renderPeriod(id, force=false){
 async function loadAll(force=false){
   if (force) Object.keys(cache).forEach(k => delete cache[k]);
   await renderPeriod(currentPeriod, force);
+  // 同步刷新月曆 + 當天明細 + 圖表
+  if (typeof selectedDate !== 'undefined' && selectedDate) {
+    await loadDayDetail(selectedDate);
+  }
+  if (typeof renderCalendar === 'function') renderCalendar();
+  if (typeof renderLineChart === 'function') renderLineChart();
+  if (typeof renderHeatmap === 'function') renderHeatmap();
 }
 
 renderTabs();
