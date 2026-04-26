@@ -216,12 +216,7 @@
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
   }
   .qr-frame::before {
-    content: "";
-    position: absolute;
-    inset: -8px;
-    border: 2px dashed var(--yellow);
-    border-radius: 18px;
-    z-index: -1;
+    display: none;          /* 移除外圍黃色虛線（列印時會變灰塊） */
   }
   .qr-frame img {
     width: 100%; height: 100%;
