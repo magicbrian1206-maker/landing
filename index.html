@@ -9,13 +9,31 @@
 <meta property="og:description" content="感謝您的光臨，請給我們一點鼓勵 🙏">
 <meta property="og:image" content="store.jpg">
 
-<!-- 簡易點擊計數器（Abacus，免費無需註冊） -->
+<!-- 簡易點擊計數器（Abacus，免費無需註冊；同時記錄日/週/月/終身） -->
 <script>
   const COUNTER_NS = 'tsann-kuen-appleshop';
+  function _pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function _isoWeek(d){
+    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const dayNum = (date.getUTCDay() + 6) % 7;
+    date.setUTCDate(date.getUTCDate() - dayNum + 3);
+    const firstThursday = new Date(Date.UTC(date.getUTCFullYear(),0,4));
+    const week = 1 + Math.round(((date - firstThursday) / 86400000 - 3 + ((firstThursday.getUTCDay()+6)%7)) / 7);
+    return date.getUTCFullYear() + 'W' + _pad(week);
+  }
+  function _hit(key){
+    fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/${key}`, {keepalive: true}).catch(()=>{});
+  }
   function trackClick(label){
-    // 觸發點擊計數（不會阻擋連結跳轉）
-    fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/${label.toLowerCase()}`, {keepalive: true}).catch(()=>{});
-    // 同時送 GA（如果有設定）
+    const k = label.toLowerCase();
+    const d = new Date();
+    const day   = `${d.getFullYear()}${_pad(d.getMonth()+1)}${_pad(d.getDate())}`;
+    const month = `${d.getFullYear()}${_pad(d.getMonth()+1)}`;
+    const week  = _isoWeek(d);
+    _hit(k);                       // 終身
+    _hit(`${k}-d-${day}`);         // 當日
+    _hit(`${k}-w-${week}`);        // 當週 (ISO)
+    _hit(`${k}-m-${month}`);       // 當月
     if (typeof gtag === 'function') {
       gtag('event', 'cta_click', { 'event_label': label });
     }

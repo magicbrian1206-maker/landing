@@ -7,131 +7,137 @@
 <title>燦坤華榮 AppleShop · 活動紀錄</title>
 <style>
   :root {
-    --line:   #06C755;
-    --line-2: #00E37F;
-    --fb:     #1877F2;
-    --fb-2:   #4DA3FF;
-    --google: #EA4335;
-    --google-2: #FBBC05;
+    --line:   #06C755;  --line-2: #00E37F;
+    --fb:     #1877F2;  --fb-2:   #4DA3FF;
+    --google: #EA4335;  --google-2: #FBBC05;
+    --yellow: #FFD500;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html, body { background: #000; color: #fff; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
                  "PingFang TC", "Microsoft JhengHei", sans-serif;
-    min-height: 100vh;
-    min-height: 100dvh;
-    padding: 24px 18px;
-    padding-top: max(24px, env(safe-area-inset-top));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    min-height: 100vh; min-height: 100dvh;
+    padding: 20px 16px;
+    padding-top: max(20px, env(safe-area-inset-top));
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
   }
   .wrap { max-width: 460px; margin: 0 auto; }
 
-  /* 頂部標題 */
+  /* 標題 */
   header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
   }
   header .left h1 {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.1;
+    font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1;
   }
   header .left .date {
-    font-size: 13px;
-    color: #ff453a;          /* Apple 系統紅，活動 App 用日期顏色 */
-    font-weight: 600;
-    margin-top: 2px;
-    letter-spacing: 0.5px;
+    font-size: 12px; color: #ff453a; font-weight: 600; margin-top: 2px; letter-spacing: 0.5px;
   }
   header .avatar {
-    width: 40px; height: 40px;
+    width: 38px; height: 38px;
     background: linear-gradient(135deg, #FFD500, #FFB800);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: #000;
-    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; color: #000; font-weight: 800;
   }
 
-  /* 環區塊 */
+  /* 時間區間切換 Tab */
+  .tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    flex-shrink: 0;
+    background: #1c1c1e;
+    color: #8e8e93;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .tab:active { transform: scale(0.95); }
+  .tab.active {
+    background: linear-gradient(135deg, var(--yellow), #FFB800);
+    color: #000;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(255,213,0,0.3);
+  }
+
+  /* 三環卡片 */
   .rings-card {
     background: linear-gradient(180deg, #1c1c1e 0%, #0a0a0a 100%);
     border-radius: 22px;
-    padding: 22px 18px 18px;
-    margin-bottom: 14px;
+    padding: 20px 16px 16px;
+    margin-bottom: 12px;
     border: 1px solid rgba(255,255,255,0.06);
   }
+  .period-label {
+    text-align: center;
+    font-size: 11px;
+    color: #8e8e93;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .period-label .name { color: #FFD500; font-weight: 700; }
   .rings-wrap {
     position: relative;
-    width: 240px;
-    height: 240px;
-    margin: 0 auto 12px;
+    width: 230px; height: 230px;
+    margin: 0 auto 10px;
   }
-  .rings-wrap svg {
-    width: 100%; height: 100%;
-    transform: rotate(-90deg);
-  }
-  .ring-bg {
-    fill: none;
-    stroke-linecap: round;
-  }
+  .rings-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke-linecap: round; }
   .ring-fg {
     fill: none;
     stroke-linecap: round;
-    transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: stroke-dashoffset 0.9s cubic-bezier(0.25, 1, 0.5, 1);
     filter: drop-shadow(0 0 6px currentColor);
   }
-  /* 中央 logo */
   .rings-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
     pointer-events: none;
   }
   .rings-center .total-num {
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1;
-    font-feature-settings: "tnum";
-    color: #fff;
+    font-size: 40px; font-weight: 800; line-height: 1;
+    font-feature-settings: "tnum"; color: #fff;
   }
   .rings-center .total-label {
-    font-size: 11px;
-    color: #8e8e93;
-    margin-top: 4px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    font-size: 10px; color: #8e8e93; margin-top: 4px;
+    letter-spacing: 1.5px; text-transform: uppercase;
   }
 
-  /* 環下方的迷你說明 */
   .legend {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    text-align: center;
-    margin-top: 4px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px; text-align: center;
   }
   .legend .item .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
+    width: 10px; height: 10px; border-radius: 50%;
     margin: 0 auto 4px;
   }
   .legend .line   .dot { background: var(--line); box-shadow: 0 0 8px var(--line); }
   .legend .fb     .dot { background: var(--fb); box-shadow: 0 0 8px var(--fb); }
   .legend .google .dot { background: var(--google-2); box-shadow: 0 0 8px var(--google-2); }
   .legend .item .name { font-size: 11px; color: #8e8e93; letter-spacing: 0.5px; }
-  .legend .item .v { font-size: 14px; font-weight: 700; margin-top: 1px; font-feature-settings: "tnum"; }
+  .legend .item .v {
+    font-size: 14px; font-weight: 700; margin-top: 1px;
+    font-feature-settings: "tnum";
+  }
 
   /* 個別卡片 */
   .stat {
@@ -139,18 +145,14 @@
     border-radius: 16px;
     padding: 14px 16px;
     margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
+    display: flex; align-items: center; gap: 14px;
     border: 1px solid rgba(255,255,255,0.05);
   }
   .stat .icon {
     width: 44px; height: 44px;
     border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-    color: #fff;
+    font-size: 22px; flex-shrink: 0; color: #fff;
   }
   .stat.line   .icon { background: var(--line); box-shadow: 0 0 14px rgba(6,199,85,0.4); }
   .stat.fb     .icon { background: var(--fb);   box-shadow: 0 0 14px rgba(24,119,242,0.4); }
@@ -158,31 +160,19 @@
                        box-shadow: 0 0 14px rgba(234,67,53,0.4); }
   .stat .text { flex: 1; min-width: 0; }
   .stat .text .name {
-    font-size: 13px;
-    color: #8e8e93;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
+    font-size: 13px; color: #8e8e93;
+    letter-spacing: 0.5px; margin-bottom: 2px;
   }
   .stat .text .desc {
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.1;
+    font-size: 22px; font-weight: 800; line-height: 1.1;
     font-feature-settings: "tnum";
   }
   .stat .text .desc .unit {
-    font-size: 12px;
-    color: #8e8e93;
-    font-weight: 500;
-    margin-left: 4px;
+    font-size: 12px; color: #8e8e93; font-weight: 500; margin-left: 4px;
   }
-  .stat .progress {
-    text-align: right;
-    flex-shrink: 0;
-  }
+  .stat .progress { text-align: right; flex-shrink: 0; }
   .stat .progress .pct {
-    font-size: 18px;
-    font-weight: 700;
-    font-feature-settings: "tnum";
+    font-size: 18px; font-weight: 700; font-feature-settings: "tnum";
   }
   .stat.line   .progress .pct { color: var(--line-2); }
   .stat.fb     .progress .pct { color: var(--fb-2); }
@@ -190,11 +180,7 @@
   .stat .progress .of { font-size: 10px; color: #8e8e93; }
 
   /* 工具列 */
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    margin-top: 14px;
-  }
+  .toolbar { display: flex; gap: 8px; margin-top: 14px; }
   .tbtn {
     flex: 1;
     background: #1c1c1e;
@@ -202,36 +188,25 @@
     border: 1px solid rgba(255,255,255,0.08);
     padding: 12px;
     border-radius: 12px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: inherit;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; font-family: inherit;
     transition: all 0.15s;
   }
   .tbtn:active { transform: scale(0.97); }
   .tbtn.primary {
     background: linear-gradient(135deg, #FFD500, #FFB800);
-    color: #000;
-    border-color: transparent;
+    color: #000; border-color: transparent;
   }
 
-  .meta {
-    text-align: center;
-    color: #6c6c70;
-    font-size: 11px;
-    margin-top: 12px;
-  }
+  .meta { text-align: center; color: #6c6c70; font-size: 11px; margin-top: 12px; }
 
-  /* 數字跳動效果 */
   @keyframes bump {
     0% { transform: scale(1); }
     50% { transform: scale(1.18); color: #FFD500; }
     100% { transform: scale(1); }
   }
   .bump { animation: bump 0.4s ease; }
-
-  /* 載入骨架 */
-  .skel { color: #3a3a3c !important; }
+  .loading { opacity: 0.5; }
 </style>
 </head>
 <body>
@@ -245,13 +220,17 @@
     <div class="avatar">🍎</div>
   </header>
 
+  <!-- 時間切換 -->
+  <div class="tabs" id="tabs"></div>
+
   <!-- 三環卡片 -->
-  <div class="rings-card">
+  <div class="rings-card" id="rings-card">
+    <div class="period-label">
+      期間：<span class="name" id="period-name">今日</span>　·　目標 <span id="period-goal">10</span>
+    </div>
     <div class="rings-wrap">
       <svg viewBox="0 0 240 240">
-        <!-- 外環：LINE (綠) -->
-        <circle class="ring-bg"
-          cx="120" cy="120" r="105"
+        <circle class="ring-bg" cx="120" cy="120" r="105"
           stroke="rgba(6,199,85,0.18)" stroke-width="20"/>
         <circle class="ring-fg" id="ring-line"
           cx="120" cy="120" r="105"
@@ -259,9 +238,7 @@
           stroke-dasharray="659.7" stroke-dashoffset="659.7"
           style="color: #06C755"/>
 
-        <!-- 中環：Facebook (藍) -->
-        <circle class="ring-bg"
-          cx="120" cy="120" r="78"
+        <circle class="ring-bg" cx="120" cy="120" r="78"
           stroke="rgba(24,119,242,0.18)" stroke-width="20"/>
         <circle class="ring-fg" id="ring-fb"
           cx="120" cy="120" r="78"
@@ -269,15 +246,13 @@
           stroke-dasharray="490.1" stroke-dashoffset="490.1"
           style="color: #1877F2"/>
 
-        <!-- 內環：Google (紅黃) -->
         <defs>
           <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#EA4335"/>
             <stop offset="100%" stop-color="#FBBC05"/>
           </linearGradient>
         </defs>
-        <circle class="ring-bg"
-          cx="120" cy="120" r="51"
+        <circle class="ring-bg" cx="120" cy="120" r="51"
           stroke="rgba(234,67,53,0.18)" stroke-width="20"/>
         <circle class="ring-fg" id="ring-google"
           cx="120" cy="120" r="51"
@@ -293,35 +268,19 @@
     </div>
 
     <div class="legend">
-      <div class="item line">
-        <div class="dot"></div>
-        <div class="name">LINE</div>
-        <div class="v" id="leg-line">0</div>
-      </div>
-      <div class="item fb">
-        <div class="dot"></div>
-        <div class="name">FB</div>
-        <div class="v" id="leg-fb">0</div>
-      </div>
-      <div class="item google">
-        <div class="dot"></div>
-        <div class="name">GOOGLE</div>
-        <div class="v" id="leg-google">0</div>
-      </div>
+      <div class="item line"><div class="dot"></div><div class="name">LINE</div><div class="v" id="leg-line">0</div></div>
+      <div class="item fb"><div class="dot"></div><div class="name">FB</div><div class="v" id="leg-fb">0</div></div>
+      <div class="item google"><div class="dot"></div><div class="name">GOOGLE</div><div class="v" id="leg-google">0</div></div>
     </div>
   </div>
 
-  <!-- 詳細卡片 -->
   <div class="stat line">
     <div class="icon">💬</div>
     <div class="text">
       <div class="name">加入 LINE 好友</div>
       <div class="desc"><span id="d-line">0</span><span class="unit">次</span></div>
     </div>
-    <div class="progress">
-      <div class="pct" id="p-line">0%</div>
-      <div class="of">目標 100</div>
-    </div>
+    <div class="progress"><div class="pct" id="p-line">0%</div><div class="of" id="g-line">目標 10</div></div>
   </div>
 
   <div class="stat fb">
@@ -330,10 +289,7 @@
       <div class="name">FB 粉絲團按讚</div>
       <div class="desc"><span id="d-fb">0</span><span class="unit">次</span></div>
     </div>
-    <div class="progress">
-      <div class="pct" id="p-fb">0%</div>
-      <div class="of">目標 100</div>
-    </div>
+    <div class="progress"><div class="pct" id="p-fb">0%</div><div class="of" id="g-fb">目標 10</div></div>
   </div>
 
   <div class="stat google">
@@ -342,14 +298,11 @@
       <div class="name">Google 五星好評</div>
       <div class="desc"><span id="d-google">0</span><span class="unit">次</span></div>
     </div>
-    <div class="progress">
-      <div class="pct" id="p-google">0%</div>
-      <div class="of">目標 100</div>
-    </div>
+    <div class="progress"><div class="pct" id="p-google">0%</div><div class="of" id="g-google">目標 10</div></div>
   </div>
 
   <div class="toolbar">
-    <button class="tbtn primary" onclick="loadStats()">🔄 重新整理</button>
+    <button class="tbtn primary" onclick="loadAll(true)">🔄 重新整理</button>
     <button class="tbtn" onclick="window.open('https://magicbrian1206-maker.github.io/landing/','_blank')">🔗 落地頁</button>
   </div>
 
@@ -358,80 +311,190 @@
 </div>
 
 <script>
-  const NS = 'tsann-kuen-appleshop';
-  const KEYS = ['line', 'facebook', 'google'];
-  const GOAL = 100;             // 每個指標目標 = 100 次
-  // 三環各自周長（依 r=105/78/51 計算 2πr）
-  const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
-  const prev = {};
+const NS = 'tsann-kuen-appleshop';
+const BRANDS = ['line', 'fb', 'google'];
+const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
 
-  async function fetchCount(key) {
-    try {
-      const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
-      if (!r.ok) return 0;
-      const j = await r.json();
-      return j.value ?? 0;
-    } catch (e) { return 0; }
+// 抓 Abacus 一個 key 的值（不存在回 0）
+async function fetchKey(key) {
+  try {
+    const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
+    if (!r.ok) return 0;
+    const j = await r.json();
+    return j.value ?? 0;
+  } catch(e) { return 0; }
+}
+
+// 日期工具
+const pad = n => n < 10 ? '0'+n : ''+n;
+function dayKey(d){ return `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`; }
+function monthKey(d){ return `${d.getFullYear()}${pad(d.getMonth()+1)}`; }
+function isoWeek(d){
+  const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const dn = (dt.getUTCDay() + 6) % 7;
+  dt.setUTCDate(dt.getUTCDate() - dn + 3);
+  const ft = new Date(Date.UTC(dt.getUTCFullYear(),0,4));
+  const w = 1 + Math.round(((dt - ft)/86400000 - 3 + ((ft.getUTCDay()+6)%7)) / 7);
+  return dt.getUTCFullYear() + 'W' + pad(w);
+}
+function lastNDays(n){
+  const arr = [];
+  for (let i = 0; i < n; i++) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    arr.push(dayKey(d));
+  }
+  return arr;
+}
+function lastNMonths(n){
+  const arr = [];
+  for (let i = 0; i < n; i++) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    arr.push(monthKey(d));
+  }
+  return arr;
+}
+
+// 取一個 brand 在某段期間的總和
+async function sumKeys(brand, keys) {
+  const vals = await Promise.all(keys.map(k => fetchKey(k)));
+  return vals.reduce((a,b)=>a+b, 0);
+}
+
+// 取得某 brand 在某 period 的計數
+async function getCount(brand, period) {
+  const today = new Date();
+  if (period === 'today') {
+    return fetchKey(`${brand}-d-${dayKey(today)}`);
+  }
+  if (period === 'week') {
+    return fetchKey(`${brand}-w-${isoWeek(today)}`);
+  }
+  if (period === 'month') {
+    return fetchKey(`${brand}-m-${monthKey(today)}`);
+  }
+  if (period === '3m') {
+    return sumKeys(brand, lastNMonths(3).map(m => `${brand}-m-${m}`));
+  }
+  if (period === '6m') {
+    return sumKeys(brand, lastNMonths(6).map(m => `${brand}-m-${m}`));
+  }
+  if (period === '1y') {
+    return sumKeys(brand, lastNMonths(12).map(m => `${brand}-m-${m}`));
+  }
+  if (period === 'total') {
+    return fetchKey(brand);
+  }
+  return 0;
+}
+
+// 期間設定
+const PERIODS = [
+  { id: 'today', label: '今日',   goal: 5 },
+  { id: 'week',  label: '本週',   goal: 25 },
+  { id: 'month', label: '本月',   goal: 50 },
+  { id: '3m',    label: '3 個月', goal: 150 },
+  { id: '6m',    label: '半年',   goal: 300 },
+  { id: '1y',    label: '一年',   goal: 600 },
+  { id: 'total', label: '總計',   goal: 1000 },
+];
+
+let currentPeriod = 'today';
+const cache = {};
+
+// 渲染 tab
+function renderTabs(){
+  const t = document.getElementById('tabs');
+  t.innerHTML = '';
+  PERIODS.forEach(p => {
+    const b = document.createElement('button');
+    b.className = 'tab' + (p.id === currentPeriod ? ' active' : '');
+    b.textContent = p.label;
+    b.onclick = () => switchPeriod(p.id);
+    t.appendChild(b);
+  });
+}
+
+async function switchPeriod(id){
+  currentPeriod = id;
+  renderTabs();
+  await renderPeriod(id);
+}
+
+function bump(id){
+  const el = document.getElementById(id);
+  el.classList.add('bump');
+  setTimeout(()=>el.classList.remove('bump'), 400);
+}
+
+const prev = {};
+async function renderPeriod(id, force=false){
+  document.getElementById('rings-card').classList.add('loading');
+  const period = PERIODS.find(p => p.id === id);
+  document.getElementById('period-name').textContent = period.label;
+  document.getElementById('period-goal').textContent = period.goal;
+
+  // 抓 3 個 brand 的數據
+  const data = {};
+  if (cache[id] && !force) {
+    Object.assign(data, cache[id]);
+  } else {
+    const counts = await Promise.all(BRANDS.map(b => getCount(b, id)));
+    BRANDS.forEach((b,i) => data[b] = counts[i]);
+    cache[id] = data;
   }
 
-  function setRing(elId, value) {
-    const el = document.getElementById(elId);
-    const key = elId.replace('ring-','').replace('fb','fb');
-    const circ = CIRCS[key === 'fb' ? 'fb' : key];
-    const pct = Math.min(value / GOAL, 1);
-    el.style.strokeDashoffset = circ - circ * pct;
-  }
+  let total = 0;
+  BRANDS.forEach(b => {
+    const v = data[b];
+    total += v;
 
-  function bump(id) {
-    const el = document.getElementById(id);
-    el.classList.add('bump');
-    setTimeout(()=>el.classList.remove('bump'), 400);
-  }
-
-  async function loadStats() {
-    const [line, fb, google] = await Promise.all(KEYS.map(fetchCount));
-    const data = { line, fb, google };
-    let total = line + fb + google;
-
-    // 三環
-    setRing('ring-line', line);
-    setRing('ring-fb', fb);
-    setRing('ring-google', google);
-
-    // 中央總數
-    const t = document.getElementById('total');
-    if (t.textContent != total) {
-      t.textContent = total.toLocaleString();
-      bump('total');
-    }
+    // 環
+    const ring = document.getElementById(`ring-${b}`);
+    const circ = CIRCS[b];
+    const pct = Math.min(v / period.goal, 1);
+    ring.style.strokeDashoffset = circ - circ * pct;
 
     // Legend
-    document.getElementById('leg-line').textContent = line.toLocaleString();
-    document.getElementById('leg-fb').textContent = fb.toLocaleString();
-    document.getElementById('leg-google').textContent = google.toLocaleString();
+    document.getElementById(`leg-${b}`).textContent = v.toLocaleString();
 
-    // 詳細卡片
-    Object.entries(data).forEach(([k, v]) => {
-      const dEl = document.getElementById(`d-${k}`);
-      const newText = v.toLocaleString();
-      if (dEl.textContent !== newText && prev[k] !== undefined) bump(`d-${k}`);
-      dEl.textContent = newText;
-      const pct = Math.round(Math.min(v / GOAL * 100, 999));
-      document.getElementById(`p-${k}`).textContent = pct + '%';
-      prev[k] = v;
-    });
+    // Detail card
+    const dEl = document.getElementById(`d-${b}`);
+    const newTxt = v.toLocaleString();
+    if (dEl.textContent !== newTxt && prev[b] !== undefined) bump(`d-${b}`);
+    dEl.textContent = newTxt;
+    document.getElementById(`p-${b}`).textContent =
+      Math.round(Math.min(v / period.goal * 100, 999)) + '%';
+    document.getElementById(`g-${b}`).textContent = `目標 ${period.goal}`;
+    prev[b] = v;
+  });
 
-    // 日期 + 更新時間
-    const now = new Date();
-    const weekday = ['日','一','二','三','四','五','六'][now.getDay()];
-    document.getElementById('today-date').textContent =
-      `${now.toLocaleDateString('zh-TW',{month:'long',day:'numeric'})} 星期${weekday}`;
-    document.getElementById('meta').textContent =
-      `最後更新：${now.toLocaleTimeString('zh-TW',{hour12:false})}　·　每 30 秒自動更新`;
+  const tEl = document.getElementById('total');
+  if (tEl.textContent != total.toLocaleString()) {
+    tEl.textContent = total.toLocaleString();
+    bump('total');
   }
 
-  loadStats();
-  setInterval(loadStats, 30000);
+  // 更新時間
+  const now = new Date();
+  const wk = ['日','一','二','三','四','五','六'][now.getDay()];
+  document.getElementById('today-date').textContent =
+    `${now.toLocaleDateString('zh-TW',{month:'long',day:'numeric'})} 星期${wk}`;
+  document.getElementById('meta').textContent =
+    `最後更新：${now.toLocaleTimeString('zh-TW',{hour12:false})}　·　每 60 秒自動更新`;
+
+  document.getElementById('rings-card').classList.remove('loading');
+}
+
+async function loadAll(force=false){
+  if (force) Object.keys(cache).forEach(k => delete cache[k]);
+  await renderPeriod(currentPeriod, force);
+}
+
+renderTabs();
+loadAll();
+setInterval(() => loadAll(true), 60000);
 </script>
 </body>
 </html>
