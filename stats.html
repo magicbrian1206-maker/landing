@@ -665,14 +665,72 @@ const DATA_KEY = { line: 'line', fb: 'facebook', google: 'google' };
 const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
 
 // 抓 Abacus 一個 key 的值（不存在回 0）
-async function fetchKey(key) {
-  try {
-    const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
-    if (!r.ok) return 0;
-    const j = await r.json();
-    return j.value ?? 0;
-  } catch(e) { return 0; }
+// 帶跨元件快取 + 限流 + 429 重試
+const _fetchCache = new Map();        // key → promise
+let _activeFetches = 0;
+const MAX_CONCURRENT = 4;
+const _waitingQueue = [];
+function _slotAvailable() {
+  if (_waitingQueue.length && _activeFetches < MAX_CONCURRENT) {
+    _activeFetches++;
+    _waitingQueue.shift()();
+  }
 }
+function _acquireSlot() {
+  if (_activeFetches < MAX_CONCURRENT) {
+    _activeFetches++;
+    return Promise.resolve();
+  }
+  return new Promise(resolve => _waitingQueue.push(resolve));
+}
+function _releaseSlot() {
+  _activeFetches--;
+  _slotAvailable();
+}
+function _sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function fetchKey(key) {
+  // 跨整頁共用快取，避免重複請求同一 key
+  if (_fetchCache.has(key)) return _fetchCache.get(key);
+
+  const promise = (async () => {
+    await _acquireSlot();
+    try {
+      let attempt = 0;
+      while (attempt < 3) {
+        try {
+          const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
+          if (r.status === 429) {
+            // Rate limit: 指數退避重試
+            attempt++;
+            const wait = 500 * Math.pow(2, attempt) + Math.random() * 400;
+            await _sleep(wait);
+            continue;
+          }
+          if (!r.ok) return 0;       // 404 = key not found → 0
+          const j = await r.json();
+          if (j.error && j.error.includes('Too many')) {
+            attempt++;
+            await _sleep(1200 + Math.random() * 800);
+            continue;
+          }
+          return j.value ?? 0;
+        } catch(e) {
+          attempt++;
+          await _sleep(500);
+        }
+      }
+      return 0;
+    } finally {
+      _releaseSlot();
+    }
+  })();
+
+  _fetchCache.set(key, promise);
+  return promise;
+}
+// 手動清除共用快取（重新整理時用）
+function clearFetchCache(){ _fetchCache.clear(); }
 
 // 日期工具
 const pad = n => n < 10 ? '0'+n : ''+n;
@@ -838,7 +896,10 @@ async function renderPeriod(id, force=false){
 }
 
 async function loadAll(force=false){
-  if (force) Object.keys(cache).forEach(k => delete cache[k]);
+  if (force) {
+    Object.keys(cache).forEach(k => delete cache[k]);
+    clearFetchCache();
+  }
   await renderPeriod(currentPeriod, force);
   // 同步刷新月曆 + 當天明細 + 圖表
   if (typeof selectedDate !== 'undefined' && selectedDate) {
