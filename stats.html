@@ -38,6 +38,10 @@
     }
     /* header / tabs / meta / 下載按鈕保持全寬 */
     .full-width { grid-column: 1 / -1; }
+    /* 每一欄的「第一張卡」上方對齊（移除預設 margin-top） */
+    .main-grid > div > *:first-child {
+      margin-top: 0 !important;
+    }
   }
   /* ===== 寬螢幕三欄佈局（>= 1280px） ===== */
   @media (min-width: 1280px) {
