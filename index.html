@@ -3,63 +3,102 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#06C755">
-<title>感謝您的支持 🙏</title>
+<meta name="theme-color" content="#000000">
+<title>燦坤華榮 AppleShop｜感謝您的支持</title>
+<meta property="og:title" content="燦坤華榮 AppleShop">
+<meta property="og:description" content="感謝您的光臨，請給我們一點鼓勵 🙏">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
                  "Microsoft JhengHei", "Helvetica Neue", sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f5f5f7;
+    color: #1d1d1f;
     min-height: 100vh;
     min-height: 100dvh;
-    color: #1d1d1f;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px 16px;
-    padding-top: max(24px, env(safe-area-inset-top));
-    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 0 0 32px;
+    padding-bottom: max(32px, env(safe-area-inset-bottom));
+  }
+  .hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    animation: kenburns 18s ease-in-out infinite alternate;
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.0); }
+    to   { transform: scale(1.08); }
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(0,0,0,0) 50%,
+      rgba(0,0,0,0.7) 100%);
+  }
+  .hero-text {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    z-index: 2;
+    padding: 0 20px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .hero-text .apple {
+    font-size: 28px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .hero-text h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
   }
   .card {
-    width: 100%;
-    max-width: 420px;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 28px;
-    padding: 36px 28px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    background: #fff;
+    margin: -24px 16px 0;
+    border-radius: 22px;
+    padding: 28px 22px 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 3;
     text-align: center;
-    animation: fadeUp 0.6s ease-out;
   }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .avatar {
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    margin: 0 auto 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 44px;
-    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-  }
-  h1 {
-    font-size: 24px;
-    margin: 0 0 8px;
-    font-weight: 700;
+  .greeting {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 6px;
+    color: #1d1d1f;
   }
   .subtitle {
     color: #6e6e73;
-    font-size: 15px;
-    margin: 0 0 28px;
-    line-height: 1.5;
+    font-size: 14.5px;
+    line-height: 1.55;
+    margin: 0 0 22px;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d2d2d7, transparent);
+    margin: 6px 0 18px;
   }
   .btn {
     display: flex;
@@ -67,82 +106,96 @@
     justify-content: center;
     gap: 10px;
     width: 100%;
-    padding: 16px 20px;
-    border-radius: 16px;
-    font-size: 17px;
+    padding: 15px 18px;
+    border-radius: 14px;
+    font-size: 16.5px;
     font-weight: 600;
     text-decoration: none;
     color: #fff;
-    margin-bottom: 12px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    margin-bottom: 11px;
+    transition: transform 0.15s ease, filter 0.15s ease;
     border: none;
     cursor: pointer;
     -webkit-user-select: none;
     user-select: none;
   }
-  .btn:active {
-    transform: scale(0.97);
+  .btn:active { transform: scale(0.97); filter: brightness(0.95); }
+  .btn-line   { background: #06C755; box-shadow: 0 4px 12px rgba(6,199,85,0.35); }
+  .btn-fb     { background: #1877F2; box-shadow: 0 4px 12px rgba(24,119,242,0.35); }
+  .btn-google { background: linear-gradient(135deg, #EA4335 0%, #FBBC05 100%);
+                box-shadow: 0 4px 12px rgba(234,67,53,0.35); }
+  .btn-icon { font-size: 20px; line-height: 1; }
+  .stars { letter-spacing: 1.5px; font-size: 16px; margin-left: 4px; }
+
+  .info {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #f0f0f2;
+    font-size: 13px;
+    color: #6e6e73;
+    line-height: 1.7;
+    text-align: center;
   }
-  .btn-line {
-    background: #06C755;
-    box-shadow: 0 4px 14px rgba(6, 199, 85, 0.4);
-  }
-  .btn-fb {
-    background: #1877F2;
-    box-shadow: 0 4px 14px rgba(24, 119, 242, 0.4);
-  }
-  .btn-google {
-    background: linear-gradient(135deg, #EA4335 0%, #FBBC05 100%);
-    box-shadow: 0 4px 14px rgba(234, 67, 53, 0.4);
-  }
-  .btn-icon {
-    font-size: 22px;
-    line-height: 1;
-  }
+  .info strong { color: #1d1d1f; font-size: 14px; }
   .footer {
-    margin-top: 24px;
-    font-size: 12px;
+    text-align: center;
+    margin-top: 18px;
+    font-size: 11.5px;
     color: #a1a1a6;
   }
-  .stars {
-    letter-spacing: 2px;
-    font-size: 18px;
-  }
   @media (max-width: 360px) {
-    .card { padding: 28px 20px; }
-    h1 { font-size: 21px; }
-    .btn { font-size: 16px; padding: 14px 16px; }
+    .card { padding: 24px 18px; }
+    .greeting { font-size: 18px; }
+    .btn { font-size: 15.5px; padding: 14px 14px; }
   }
 </style>
 </head>
 <body>
-  <main class="card">
-    <div class="avatar" aria-hidden="true">🙏</div>
-    <h1>感謝您的支持</h1>
-    <p class="subtitle">您的每一個小動作<br>都是我們前進的最大動力 💪</p>
+  <div class="wrap">
+    <header class="hero">
+      <img src="store.jpg" alt="燦坤華榮 AppleShop 店面"
+           onerror="this.style.display='none'">
+      <div class="hero-text">
+        <div class="apple"></div>
+        <h1>燦坤華榮 AppleShop</h1>
+      </div>
+    </header>
 
-    <a class="btn btn-line"
-       href="https://lin.ee/WDINrym"
-       target="_blank" rel="noopener">
-      <span class="btn-icon">💬</span>
-      <span>加入 LINE 好友</span>
-    </a>
+    <main class="card">
+      <p class="greeting">感謝您的光臨 🙏</p>
+      <p class="subtitle">您的每一個鼓勵<br>都是我們持續用心服務的動力</p>
 
-    <a class="btn btn-fb"
-       href="https://www.facebook.com/profile.php?id=61586040699143"
-       target="_blank" rel="noopener">
-      <span class="btn-icon">👍</span>
-      <span>FB 粉絲團按讚</span>
-    </a>
+      <div class="divider"></div>
 
-    <a class="btn btn-google"
-       href="https://share.google/96j5S0EjY9PWu6jHo"
-       target="_blank" rel="noopener">
-      <span class="btn-icon">⭐</span>
-      <span>Google 給五顆星<span class="stars" style="margin-left:6px">★★★★★</span></span>
-    </a>
+      <a class="btn btn-line"
+         href="https://lin.ee/WDINrym"
+         target="_blank" rel="noopener">
+        <span class="btn-icon">💬</span>
+        <span>加入 LINE 好友</span>
+      </a>
 
-    <p class="footer">© 2026 — Made with ❤️</p>
-  </main>
+      <a class="btn btn-fb"
+         href="https://www.facebook.com/profile.php?id=61586040699143"
+         target="_blank" rel="noopener">
+        <span class="btn-icon">👍</span>
+        <span>FB 粉絲團按讚</span>
+      </a>
+
+      <a class="btn btn-google"
+         href="https://share.google/96j5S0EjY9PWu6jHo"
+         target="_blank" rel="noopener">
+        <span class="btn-icon">⭐</span>
+        <span>Google 給五顆星<span class="stars">★★★★★</span></span>
+      </a>
+
+      <div class="info">
+        <strong>燦坤華榮 AppleShop</strong><br>
+        Apple 授權經銷夥伴<br>
+        提供 iPhone・Mac・iPad・Apple Watch 展示與諮詢
+      </div>
+    </main>
+
+    <p class="footer">© 2026 燦坤華榮 AppleShop · Made with ❤️</p>
+  </div>
 </body>
 </html>
