@@ -112,8 +112,9 @@
   .brand-top {
     display: flex;
     align-items: center;
-    justify-content: center;     /* 水平置中 */
+    justify-content: center;
     gap: 12px;
+    margin-left: -40mm;            /* 整體向左偏移 */
   }
   .apple-logo {
     width: 38px; height: 38px;
@@ -125,12 +126,10 @@
     letter-spacing: 5px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #FFE100;                       /* 更亮的黃 */
-    background: rgba(0, 0, 0, 0.55);      /* 黑色半透明底，讓黃字跳出 */
-    padding: 8px 18px;
-    border-radius: 999px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    color: #FFE100;
+    text-shadow:
+      0 0 1px rgba(0,0,0,0.6),
+      0 1px 2px rgba(0,0,0,0.5);   /* 細微深色描邊讓黃字在白牆上仍清楚 */
   }
   .photo-bottom h2 {
     font-size: 44px;
