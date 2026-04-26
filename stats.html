@@ -660,6 +660,8 @@
 <script>
 const NS = 'tsann-kuen-appleshop';
 const BRANDS = ['line', 'fb', 'google'];
+// Abacus 鍵長度至少 3 字元，因此 fb 的資料鍵使用 'facebook'（UI 用 fb，資料用 facebook）
+const DATA_KEY = { line: 'line', fb: 'facebook', google: 'google' };
 const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
 
 // 抓 Abacus 一個 key 的值（不存在回 0）
@@ -711,27 +713,28 @@ async function sumKeys(brand, keys) {
 
 // 取得某 brand 在某 period 的計數
 async function getCount(brand, period) {
+  const dk = DATA_KEY[brand];
   const today = new Date();
   if (period === 'today') {
-    return fetchKey(`${brand}-d-${dayKey(today)}`);
+    return fetchKey(`${dk}-d-${dayKey(today)}`);
   }
   if (period === 'week') {
-    return fetchKey(`${brand}-w-${isoWeek(today)}`);
+    return fetchKey(`${dk}-w-${isoWeek(today)}`);
   }
   if (period === 'month') {
-    return fetchKey(`${brand}-m-${monthKey(today)}`);
+    return fetchKey(`${dk}-m-${monthKey(today)}`);
   }
   if (period === '3m') {
-    return sumKeys(brand, lastNMonths(3).map(m => `${brand}-m-${m}`));
+    return sumKeys(brand, lastNMonths(3).map(m => `${dk}-m-${m}`));
   }
   if (period === '6m') {
-    return sumKeys(brand, lastNMonths(6).map(m => `${brand}-m-${m}`));
+    return sumKeys(brand, lastNMonths(6).map(m => `${dk}-m-${m}`));
   }
   if (period === '1y') {
-    return sumKeys(brand, lastNMonths(12).map(m => `${brand}-m-${m}`));
+    return sumKeys(brand, lastNMonths(12).map(m => `${dk}-m-${m}`));
   }
   if (period === 'total') {
-    return fetchKey(brand);
+    return fetchKey(dk);
   }
   return 0;
 }
@@ -906,7 +909,7 @@ async function renderCalendar(){
   // 背景查詢每天總點擊數，顯示活動點
   visibleDays.forEach(async ({d, date, btn}) => {
     const key = `${date.getFullYear()}${pad(date.getMonth()+1)}${pad(date.getDate())}`;
-    const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${key}`)));
+    const counts = await Promise.all(BRANDS.map(b => fetchKey(`${DATA_KEY[b]}-d-${key}`)));
     const total = counts.reduce((a,b)=>a+b, 0);
     if (total > 0 && !btn.classList.contains('selected')) {
       const dot = document.createElement('div');
@@ -935,7 +938,7 @@ async function loadDayDetail(date){
   ['line','fb','google'].forEach(b => document.getElementById(`dc-${b}`).textContent = '…');
   document.getElementById('dc-total').textContent = '…';
 
-  const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${key}`)));
+  const counts = await Promise.all(BRANDS.map(b => fetchKey(`${DATA_KEY[b]}-d-${key}`)));
   let total = 0;
   BRANDS.forEach((b, i) => {
     document.getElementById(`dc-${b}`).textContent = counts[i].toLocaleString();
@@ -983,7 +986,7 @@ async function renderLineChart(){
     google: { color: '#FBBC05', label: 'Google' },
   };
   for (const b of BRANDS) {
-    const counts = await Promise.all(days.map(k => fetchKey(`${b}-d-${k}`)));
+    const counts = await Promise.all(days.map(k => fetchKey(`${DATA_KEY[b]}-d-${k}`)));
     datasets.push({
       label: colorMap[b].label,
       data: counts,
@@ -1058,7 +1061,7 @@ async function renderHeatmap(){
   // 抓取所有日期的計數
   await Promise.all(cells.filter(c => !c.future).map(async c => {
     const k = `${c.date.getFullYear()}${pad(c.date.getMonth()+1)}${pad(c.date.getDate())}`;
-    const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${k}`)));
+    const counts = await Promise.all(BRANDS.map(b => fetchKey(`${DATA_KEY[b]}-d-${k}`)));
     c.val = counts.reduce((a,b)=>a+b, 0);
     if (c.val > maxVal) maxVal = c.val;
   }));
@@ -1099,7 +1102,7 @@ async function exportExcel(){
 
   try {
     // ① 終身總計
-    const totalCounts = await Promise.all(BRANDS.map(b => fetchKey(b)));
+    const totalCounts = await Promise.all(BRANDS.map(b => fetchKey(DATA_KEY[b])));
 
     // ② 過去 90 天每日紀錄
     const days = lastNDays(90);
@@ -1107,7 +1110,7 @@ async function exportExcel(){
     for (const k of days.reverse()) {
       const date = new Date(parseInt(k.slice(0,4)), parseInt(k.slice(4,6))-1, parseInt(k.slice(6,8)));
       const wk = ['日','一','二','三','四','五','六'][date.getDay()];
-      const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-d-${k}`)));
+      const counts = await Promise.all(BRANDS.map(b => fetchKey(`${DATA_KEY[b]}-d-${k}`)));
       const total = counts.reduce((a,b)=>a+b,0);
       dailyData.push([
         `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`,
@@ -1119,7 +1122,7 @@ async function exportExcel(){
     const months = lastNMonths(12);
     const monthData = [['月份', 'LINE', 'Facebook', 'Google', '總計']];
     for (const m of months.reverse()) {
-      const counts = await Promise.all(BRANDS.map(b => fetchKey(`${b}-m-${m}`)));
+      const counts = await Promise.all(BRANDS.map(b => fetchKey(`${DATA_KEY[b]}-m-${m}`)));
       const total = counts.reduce((a,b)=>a+b,0);
       monthData.push([
         `${m.slice(0,4)}-${m.slice(4,6)}`,
