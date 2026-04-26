@@ -1,9 +1,9 @@
-name: Daily Stats Report
+name: Weekly Stats Report
 
 on:
   schedule:
-    # 每天台灣時間 21:30 (UTC 13:30) 寄報表
-    - cron: '30 13 * * *'
+    # 每週日台灣時間 22:00 (UTC 14:00) 寄出週報
+    - cron: '0 14 * * 0'
   workflow_dispatch:        # 手動觸發
 
 jobs:
