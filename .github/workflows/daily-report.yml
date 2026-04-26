@@ -1,0 +1,27 @@
+name: Daily Stats Report
+
+on:
+  schedule:
+    # 每天台灣時間 21:30 (UTC 13:30) 寄報表
+    - cron: '30 13 * * *'
+  workflow_dispatch:        # 手動觸發
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install nodemailer xlsx node-fetch@2
+
+      - name: Send report
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          REPORT_TO: ${{ secrets.REPORT_TO }}
+        run: node scripts/send-report.js
