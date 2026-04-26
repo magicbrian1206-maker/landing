@@ -7,14 +7,36 @@
 <title>燦坤華榮 AppleShop｜感謝您的支持</title>
 <meta property="og:title" content="燦坤華榮 AppleShop">
 <meta property="og:description" content="感謝您的光臨，請給我們一點鼓勵 🙏">
+<meta property="og:image" content="store.jpg">
+
+<!-- Google Analytics 4 (將 G-XXXXXXXXXX 替換為你的 Measurement ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+  // 按鈕點擊事件追蹤
+  function trackClick(label){
+    gtag('event', 'cta_click', { 'event_label': label });
+  }
+</script>
+
 <style>
+  :root {
+    --tsann-yellow: #FFD500;
+    --tsann-yellow-dark: #E6BE00;
+    --apple-gray: #1d1d1f;
+    --apple-text-secondary: #6e6e73;
+    --apple-divider: #d2d2d7;
+  }
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html, body { margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
                  "Microsoft JhengHei", "Helvetica Neue", sans-serif;
     background: #f5f5f7;
-    color: #1d1d1f;
+    color: var(--apple-gray);
     min-height: 100vh;
     min-height: 100dvh;
     -webkit-font-smoothing: antialiased;
@@ -49,29 +71,48 @@
     inset: 0;
     background: linear-gradient(180deg,
       rgba(0,0,0,0) 50%,
-      rgba(0,0,0,0.7) 100%);
+      rgba(0,0,0,0.75) 100%);
+  }
+  .yellow-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--tsann-yellow);
+    z-index: 4;
   }
   .hero-text {
     position: absolute;
-    bottom: 20px;
+    bottom: 22px;
     left: 0;
     right: 0;
     text-align: center;
     color: #fff;
     z-index: 2;
     padding: 0 20px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
   .hero-text .apple {
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1;
     margin-bottom: 6px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
   .hero-text h1 {
     margin: 0;
     font-size: 22px;
     font-weight: 600;
     letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+  .hero-text .badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 12px;
+    background: var(--tsann-yellow);
+    color: #1d1d1f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-radius: 99px;
   }
   .card {
     background: #fff;
@@ -87,17 +128,16 @@
     font-size: 20px;
     font-weight: 600;
     margin: 0 0 6px;
-    color: #1d1d1f;
   }
   .subtitle {
-    color: #6e6e73;
+    color: var(--apple-text-secondary);
     font-size: 14.5px;
     line-height: 1.55;
     margin: 0 0 22px;
   }
   .divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, #d2d2d7, transparent);
+    background: linear-gradient(90deg, transparent, var(--apple-divider), transparent);
     margin: 6px 0 18px;
   }
   .btn {
@@ -129,14 +169,44 @@
 
   .info {
     margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid #f0f0f2;
-    font-size: 13px;
-    color: #6e6e73;
-    line-height: 1.7;
-    text-align: center;
+    padding: 18px 16px;
+    background: linear-gradient(135deg, #fffbe6 0%, #fff8d1 100%);
+    border-radius: 14px;
+    font-size: 13.5px;
+    color: var(--apple-gray);
+    line-height: 1.85;
+    text-align: left;
   }
-  .info strong { color: #1d1d1f; font-size: 14px; }
+  .info .store-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--tsann-yellow);
+  }
+  .info .store-name::before {
+    content: "🍎";
+    font-size: 18px;
+  }
+  .info .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .info .label {
+    color: var(--apple-text-secondary);
+    min-width: 56px;
+    font-size: 12.5px;
+  }
+  .info .val {
+    flex: 1;
+    color: var(--apple-gray);
+  }
+  .info a { color: #1d1d1f; text-decoration: none; border-bottom: 1px dashed #999; }
+
   .footer {
     text-align: center;
     margin-top: 18px;
@@ -153,11 +223,13 @@
 <body>
   <div class="wrap">
     <header class="hero">
+      <div class="yellow-bar"></div>
       <img src="store.jpg" alt="燦坤華榮 AppleShop 店面"
            onerror="this.style.display='none'">
       <div class="hero-text">
         <div class="apple"></div>
         <h1>燦坤華榮 AppleShop</h1>
+        <span class="badge">APPLE 授權經銷</span>
       </div>
     </header>
 
@@ -169,6 +241,7 @@
 
       <a class="btn btn-line"
          href="https://lin.ee/WDINrym"
+         onclick="trackClick('LINE')"
          target="_blank" rel="noopener">
         <span class="btn-icon">💬</span>
         <span>加入 LINE 好友</span>
@@ -176,6 +249,7 @@
 
       <a class="btn btn-fb"
          href="https://www.facebook.com/profile.php?id=61586040699143"
+         onclick="trackClick('Facebook')"
          target="_blank" rel="noopener">
         <span class="btn-icon">👍</span>
         <span>FB 粉絲團按讚</span>
@@ -183,19 +257,22 @@
 
       <a class="btn btn-google"
          href="https://share.google/96j5S0EjY9PWu6jHo"
+         onclick="trackClick('Google')"
          target="_blank" rel="noopener">
         <span class="btn-icon">⭐</span>
         <span>Google 給五顆星<span class="stars">★★★★★</span></span>
       </a>
 
       <div class="info">
-        <strong>燦坤華榮 AppleShop</strong><br>
-        Apple 授權經銷夥伴<br>
-        提供 iPhone・Mac・iPad・Apple Watch 展示與諮詢
+        <div class="store-name">燦坤華榮 AppleShop</div>
+        <div class="row"><span class="label">📞 電話</span><span class="val">02-XXXX-XXXX</span></div>
+        <div class="row"><span class="label">📍 地址</span><span class="val">（請提供地址後更新）</span></div>
+        <div class="row"><span class="label">🕐 營業</span><span class="val">週一～週日 11:00–22:00</span></div>
+        <div class="row"><span class="label">🛍 服務</span><span class="val">iPhone・Mac・iPad・Watch 展示與諮詢</span></div>
       </div>
     </main>
 
-    <p class="footer">© 2026 燦坤華榮 AppleShop · Made with ❤️</p>
+    <p class="footer">© 2026 燦坤華榮 AppleShop · Apple 授權經銷夥伴</p>
   </div>
 </body>
 </html>
