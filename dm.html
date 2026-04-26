@@ -6,13 +6,27 @@
 <style>
   /* ====== A4 橫向列印設定 ====== */
   @page {
-    size: A4 landscape;
+    size: 297mm 210mm;
     margin: 0;
   }
   @media print {
-    html, body { width: 297mm; height: 210mm; }
+    html, body {
+      width: 297mm;
+      height: 210mm;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+      overflow: hidden;
+    }
     .no-print { display: none !important; }
-    .page { box-shadow: none !important; margin: 0 !important; }
+    .page {
+      box-shadow: none !important;
+      margin: 0 !important;
+      width: 297mm !important;
+      height: 210mm !important;
+      page-break-after: avoid;
+      page-break-inside: avoid;
+    }
     /* 強制列印背景色與圖片 */
     *, *::before, *::after {
       -webkit-print-color-adjust: exact !important;
