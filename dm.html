@@ -86,12 +86,15 @@
   .photo-overlay {
     position: absolute;
     inset: 0;
-    padding: 28mm 22mm;
+    padding: 22mm 22mm 80mm;   /* 加大下方 padding，讓文字往上離開地板 */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     color: #fff;
     z-index: 2;
+  }
+  .photo-bottom {
+    margin-left: 8mm;          /* 文字稍微向右偏移 */
   }
   .brand-top {
     display: flex;
