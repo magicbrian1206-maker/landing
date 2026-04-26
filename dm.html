@@ -12,6 +12,19 @@
   @media print {
     html, body { width: 297mm; height: 210mm; }
     .no-print { display: none !important; }
+    .page { box-shadow: none !important; margin: 0 !important; }
+    /* 強制列印背景色與圖片 */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .photo-side img { filter: none !important; }
+  }
+  /* 螢幕也設定，雙保險 */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   :root {
