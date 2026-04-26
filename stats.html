@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>燦坤華榮 AppleShop · 活動紀錄</title>
+<style>
+  :root {
+    --line:   #06C755;
+    --line-2: #00E37F;
+    --fb:     #1877F2;
+    --fb-2:   #4DA3FF;
+    --google: #EA4335;
+    --google-2: #FBBC05;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { background: #000; color: #fff; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                 "PingFang TC", "Microsoft JhengHei", sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px 18px;
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 460px; margin: 0 auto; }
+
+  /* 頂部標題 */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  header .left h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  header .left .date {
+    font-size: 13px;
+    color: #ff453a;          /* Apple 系統紅，活動 App 用日期顏色 */
+    font-weight: 600;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+  }
+  header .avatar {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, #FFD500, #FFB800);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #000;
+    font-weight: 800;
+  }
+
+  /* 環區塊 */
+  .rings-card {
+    background: linear-gradient(180deg, #1c1c1e 0%, #0a0a0a 100%);
+    border-radius: 22px;
+    padding: 22px 18px 18px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .rings-wrap {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 12px;
+  }
+  .rings-wrap svg {
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ring-bg {
+    fill: none;
+    stroke-linecap: round;
+  }
+  .ring-fg {
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    filter: drop-shadow(0 0 6px currentColor);
+  }
+  /* 中央 logo */
+  .rings-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .rings-center .total-num {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    font-feature-settings: "tnum";
+    color: #fff;
+  }
+  .rings-center .total-label {
+    font-size: 11px;
+    color: #8e8e93;
+    margin-top: 4px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* 環下方的迷你說明 */
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    text-align: center;
+    margin-top: 4px;
+  }
+  .legend .item .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    margin: 0 auto 4px;
+  }
+  .legend .line   .dot { background: var(--line); box-shadow: 0 0 8px var(--line); }
+  .legend .fb     .dot { background: var(--fb); box-shadow: 0 0 8px var(--fb); }
+  .legend .google .dot { background: var(--google-2); box-shadow: 0 0 8px var(--google-2); }
+  .legend .item .name { font-size: 11px; color: #8e8e93; letter-spacing: 0.5px; }
+  .legend .item .v { font-size: 14px; font-weight: 700; margin-top: 1px; font-feature-settings: "tnum"; }
+
+  /* 個別卡片 */
+  .stat {
+    background: #1c1c1e;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .stat .icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .stat.line   .icon { background: var(--line); box-shadow: 0 0 14px rgba(6,199,85,0.4); }
+  .stat.fb     .icon { background: var(--fb);   box-shadow: 0 0 14px rgba(24,119,242,0.4); }
+  .stat.google .icon { background: linear-gradient(135deg, #EA4335 0%, #FBBC05 100%);
+                       box-shadow: 0 0 14px rgba(234,67,53,0.4); }
+  .stat .text { flex: 1; min-width: 0; }
+  .stat .text .name {
+    font-size: 13px;
+    color: #8e8e93;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .stat .text .desc {
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.1;
+    font-feature-settings: "tnum";
+  }
+  .stat .text .desc .unit {
+    font-size: 12px;
+    color: #8e8e93;
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  .stat .progress {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .stat .progress .pct {
+    font-size: 18px;
+    font-weight: 700;
+    font-feature-settings: "tnum";
+  }
+  .stat.line   .progress .pct { color: var(--line-2); }
+  .stat.fb     .progress .pct { color: var(--fb-2); }
+  .stat.google .progress .pct { color: var(--google-2); }
+  .stat .progress .of { font-size: 10px; color: #8e8e93; }
+
+  /* 工具列 */
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .tbtn {
+    flex: 1;
+    background: #1c1c1e;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .tbtn:active { transform: scale(0.97); }
+  .tbtn.primary {
+    background: linear-gradient(135deg, #FFD500, #FFB800);
+    color: #000;
+    border-color: transparent;
+  }
+
+  .meta {
+    text-align: center;
+    color: #6c6c70;
+    font-size: 11px;
+    margin-top: 12px;
+  }
+
+  /* 數字跳動效果 */
+  @keyframes bump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.18); color: #FFD500; }
+    100% { transform: scale(1); }
+  }
+  .bump { animation: bump 0.4s ease; }
+
+  /* 載入骨架 */
+  .skel { color: #3a3a3c !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="left">
+      <h1>活動紀錄</h1>
+      <div class="date" id="today-date">— —</div>
+    </div>
+    <div class="avatar">🍎</div>
+  </header>
+
+  <!-- 三環卡片 -->
+  <div class="rings-card">
+    <div class="rings-wrap">
+      <svg viewBox="0 0 240 240">
+        <!-- 外環：LINE (綠) -->
+        <circle class="ring-bg"
+          cx="120" cy="120" r="105"
+          stroke="rgba(6,199,85,0.18)" stroke-width="20"/>
+        <circle class="ring-fg" id="ring-line"
+          cx="120" cy="120" r="105"
+          stroke="#06C755" stroke-width="20"
+          stroke-dasharray="659.7" stroke-dashoffset="659.7"
+          style="color: #06C755"/>
+
+        <!-- 中環：Facebook (藍) -->
+        <circle class="ring-bg"
+          cx="120" cy="120" r="78"
+          stroke="rgba(24,119,242,0.18)" stroke-width="20"/>
+        <circle class="ring-fg" id="ring-fb"
+          cx="120" cy="120" r="78"
+          stroke="#1877F2" stroke-width="20"
+          stroke-dasharray="490.1" stroke-dashoffset="490.1"
+          style="color: #1877F2"/>
+
+        <!-- 內環：Google (紅黃) -->
+        <defs>
+          <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#EA4335"/>
+            <stop offset="100%" stop-color="#FBBC05"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg"
+          cx="120" cy="120" r="51"
+          stroke="rgba(234,67,53,0.18)" stroke-width="20"/>
+        <circle class="ring-fg" id="ring-google"
+          cx="120" cy="120" r="51"
+          stroke="url(#gg)" stroke-width="20"
+          stroke-dasharray="320.4" stroke-dashoffset="320.4"
+          style="color: #EA4335"/>
+      </svg>
+
+      <div class="rings-center">
+        <div class="total-num" id="total">0</div>
+        <div class="total-label">TOTAL</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="item line">
+        <div class="dot"></div>
+        <div class="name">LINE</div>
+        <div class="v" id="leg-line">0</div>
+      </div>
+      <div class="item fb">
+        <div class="dot"></div>
+        <div class="name">FB</div>
+        <div class="v" id="leg-fb">0</div>
+      </div>
+      <div class="item google">
+        <div class="dot"></div>
+        <div class="name">GOOGLE</div>
+        <div class="v" id="leg-google">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 詳細卡片 -->
+  <div class="stat line">
+    <div class="icon">💬</div>
+    <div class="text">
+      <div class="name">加入 LINE 好友</div>
+      <div class="desc"><span id="d-line">0</span><span class="unit">次</span></div>
+    </div>
+    <div class="progress">
+      <div class="pct" id="p-line">0%</div>
+      <div class="of">目標 100</div>
+    </div>
+  </div>
+
+  <div class="stat fb">
+    <div class="icon">👍</div>
+    <div class="text">
+      <div class="name">FB 粉絲團按讚</div>
+      <div class="desc"><span id="d-fb">0</span><span class="unit">次</span></div>
+    </div>
+    <div class="progress">
+      <div class="pct" id="p-fb">0%</div>
+      <div class="of">目標 100</div>
+    </div>
+  </div>
+
+  <div class="stat google">
+    <div class="icon">⭐</div>
+    <div class="text">
+      <div class="name">Google 五星好評</div>
+      <div class="desc"><span id="d-google">0</span><span class="unit">次</span></div>
+    </div>
+    <div class="progress">
+      <div class="pct" id="p-google">0%</div>
+      <div class="of">目標 100</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="tbtn primary" onclick="loadStats()">🔄 重新整理</button>
+    <button class="tbtn" onclick="window.open('https://magicbrian1206-maker.github.io/landing/','_blank')">🔗 落地頁</button>
+  </div>
+
+  <div class="meta" id="meta">資料載入中...</div>
+
+</div>
+
+<script>
+  const NS = 'tsann-kuen-appleshop';
+  const KEYS = ['line', 'facebook', 'google'];
+  const GOAL = 100;             // 每個指標目標 = 100 次
+  // 三環各自周長（依 r=105/78/51 計算 2πr）
+  const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
+  const prev = {};
+
+  async function fetchCount(key) {
+    try {
+      const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
+      if (!r.ok) return 0;
+      const j = await r.json();
+      return j.value ?? 0;
+    } catch (e) { return 0; }
+  }
+
+  function setRing(elId, value) {
+    const el = document.getElementById(elId);
+    const key = elId.replace('ring-','').replace('fb','fb');
+    const circ = CIRCS[key === 'fb' ? 'fb' : key];
+    const pct = Math.min(value / GOAL, 1);
+    el.style.strokeDashoffset = circ - circ * pct;
+  }
+
+  function bump(id) {
+    const el = document.getElementById(id);
+    el.classList.add('bump');
+    setTimeout(()=>el.classList.remove('bump'), 400);
+  }
+
+  async function loadStats() {
+    const [line, fb, google] = await Promise.all(KEYS.map(fetchCount));
+    const data = { line, fb, google };
+    let total = line + fb + google;
+
+    // 三環
+    setRing('ring-line', line);
+    setRing('ring-fb', fb);
+    setRing('ring-google', google);
+
+    // 中央總數
+    const t = document.getElementById('total');
+    if (t.textContent != total) {
+      t.textContent = total.toLocaleString();
+      bump('total');
+    }
+
+    // Legend
+    document.getElementById('leg-line').textContent = line.toLocaleString();
+    document.getElementById('leg-fb').textContent = fb.toLocaleString();
+    document.getElementById('leg-google').textContent = google.toLocaleString();
+
+    // 詳細卡片
+    Object.entries(data).forEach(([k, v]) => {
+      const dEl = document.getElementById(`d-${k}`);
+      const newText = v.toLocaleString();
+      if (dEl.textContent !== newText && prev[k] !== undefined) bump(`d-${k}`);
+      dEl.textContent = newText;
+      const pct = Math.round(Math.min(v / GOAL * 100, 999));
+      document.getElementById(`p-${k}`).textContent = pct + '%';
+      prev[k] = v;
+    });
+
+    // 日期 + 更新時間
+    const now = new Date();
+    const weekday = ['日','一','二','三','四','五','六'][now.getDay()];
+    document.getElementById('today-date').textContent =
+      `${now.toLocaleDateString('zh-TW',{month:'long',day:'numeric'})} 星期${weekday}`;
+    document.getElementById('meta').textContent =
+      `最後更新：${now.toLocaleTimeString('zh-TW',{hour12:false})}　·　每 30 秒自動更新`;
+  }
+
+  loadStats();
+  setInterval(loadStats, 30000);
+</script>
+</body>
+</html>

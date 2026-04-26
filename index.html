@@ -9,6 +9,19 @@
 <meta property="og:description" content="感謝您的光臨，請給我們一點鼓勵 🙏">
 <meta property="og:image" content="store.jpg">
 
+<!-- 簡易點擊計數器（Abacus，免費無需註冊） -->
+<script>
+  const COUNTER_NS = 'tsann-kuen-appleshop';
+  function trackClick(label){
+    // 觸發點擊計數（不會阻擋連結跳轉）
+    fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/${label.toLowerCase()}`, {keepalive: true}).catch(()=>{});
+    // 同時送 GA（如果有設定）
+    if (typeof gtag === 'function') {
+      gtag('event', 'cta_click', { 'event_label': label });
+    }
+  }
+</script>
+
 <!-- Google Analytics 4 (將 G-XXXXXXXXXX 替換為你的 Measurement ID) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -16,10 +29,6 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-XXXXXXXXXX');
-  // 按鈕點擊事件追蹤
-  function trackClick(label){
-    gtag('event', 'cta_click', { 'event_label': label });
-  }
 </script>
 
 <style>
