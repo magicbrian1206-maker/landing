@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#06C755">
+<title>感謝您的支持 🙏</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang TC",
+                 "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    min-height: 100dvh;
+    color: #1d1d1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
+  }
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 36px 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    animation: fadeUp 0.6s ease-out;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  }
+  h1 {
+    font-size: 24px;
+    margin: 0 0 8px;
+    font-weight: 700;
+  }
+  .subtitle {
+    color: #6e6e73;
+    font-size: 15px;
+    margin: 0 0 28px;
+    line-height: 1.5;
+  }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    margin-bottom: 12px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn-line {
+    background: #06C755;
+    box-shadow: 0 4px 14px rgba(6, 199, 85, 0.4);
+  }
+  .btn-fb {
+    background: #1877F2;
+    box-shadow: 0 4px 14px rgba(24, 119, 242, 0.4);
+  }
+  .btn-google {
+    background: linear-gradient(135deg, #EA4335 0%, #FBBC05 100%);
+    box-shadow: 0 4px 14px rgba(234, 67, 53, 0.4);
+  }
+  .btn-icon {
+    font-size: 22px;
+    line-height: 1;
+  }
+  .footer {
+    margin-top: 24px;
+    font-size: 12px;
+    color: #a1a1a6;
+  }
+  .stars {
+    letter-spacing: 2px;
+    font-size: 18px;
+  }
+  @media (max-width: 360px) {
+    .card { padding: 28px 20px; }
+    h1 { font-size: 21px; }
+    .btn { font-size: 16px; padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="avatar" aria-hidden="true">🙏</div>
+    <h1>感謝您的支持</h1>
+    <p class="subtitle">您的每一個小動作<br>都是我們前進的最大動力 💪</p>
+
+    <a class="btn btn-line"
+       href="https://lin.ee/WDINrym"
+       target="_blank" rel="noopener">
+      <span class="btn-icon">💬</span>
+      <span>加入 LINE 好友</span>
+    </a>
+
+    <a class="btn btn-fb"
+       href="https://www.facebook.com/profile.php?id=61586040699143"
+       target="_blank" rel="noopener">
+      <span class="btn-icon">👍</span>
+      <span>FB 粉絲團按讚</span>
+    </a>
+
+    <a class="btn btn-google"
+       href="https://share.google/96j5S0EjY9PWu6jHo"
+       target="_blank" rel="noopener">
+      <span class="btn-icon">⭐</span>
+      <span>Google 給五顆星<span class="stars" style="margin-left:6px">★★★★★</span></span>
+    </a>
+
+    <p class="footer">© 2026 — Made with ❤️</p>
+  </main>
+</body>
+</html>
