@@ -39,6 +39,24 @@
     /* header / tabs / meta / 下載按鈕保持全寬 */
     .full-width { grid-column: 1 / -1; }
   }
+  /* ===== 寬螢幕三欄佈局（>= 1280px） ===== */
+  @media (min-width: 1280px) {
+    .wrap { max-width: 1380px; }
+    .main-grid {
+      grid-template-columns: 1fr 1.05fr 1fr;
+      gap: 14px;
+    }
+    .full-width { grid-column: 1 / -1; }
+    /* 三環縮小一點 */
+    .rings-wrap { width: 200px; height: 200px; }
+    .rings-center .total-num { font-size: 34px; }
+    .chart-wrap { height: 180px; }
+    .heat-cell { width: 12px; height: 12px; }
+    .heat-grid { grid-template-rows: repeat(7, 12px); grid-auto-columns: 12px; }
+    .stat { padding: 12px 14px; }
+    .stat .icon { width: 38px; height: 38px; font-size: 18px; }
+    .stat .text .desc { font-size: 18px; }
+  }
   /* 手機/平板維持單欄 */
   @media (max-width: 899px) {
     .main-grid > * { grid-column: 1; }
@@ -550,15 +568,9 @@
 
   <div class="meta" id="meta">資料載入中...</div>
 
-  <!-- ===== 折線圖（左欄底部） ===== -->
-  <div class="chart-card">
-    <h3><span class="icon">📈</span>近 30 日趨勢</h3>
-    <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
-  </div>
-
     </div>  <!-- 左欄結束 -->
 
-    <!-- ============ 右欄：日期 / 圖表 ============ -->
+    <!-- ============ 中欄：月曆 + 折線圖 ============ -->
     <div>
 
   <!-- ===== 月曆 ===== -->
@@ -602,6 +614,17 @@
       </div>
     </div>
   </div>
+
+  <!-- ===== 折線圖（中欄底部） ===== -->
+  <div class="chart-card">
+    <h3><span class="icon">📈</span>近 30 日趨勢</h3>
+    <div class="chart-wrap"><canvas id="lineChart"></canvas></div>
+  </div>
+
+    </div>  <!-- 中欄結束 -->
+
+    <!-- ============ 右欄：熱力圖 + Excel ============ -->
+    <div>
 
   <!-- ===== 熱力圖 ===== -->
   <div class="chart-card">
