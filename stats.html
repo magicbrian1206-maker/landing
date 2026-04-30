@@ -665,10 +665,10 @@ const DATA_KEY = { line: 'line', fb: 'facebook', google: 'google' };
 const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
 
 // 抓 Abacus 一個 key 的值（不存在回 0）
-// 帶跨元件快取 + 限流 + 429 重試
+// 帶跨元件快取 + 限流 + 429 指數退避重試；失敗不快取
 const _fetchCache = new Map();        // key → promise
 let _activeFetches = 0;
-const MAX_CONCURRENT = 4;
+const MAX_CONCURRENT = 2;             // Abacus rate limit 很嚴，降低併發
 const _waitingQueue = [];
 function _slotAvailable() {
   if (_waitingQueue.length && _activeFetches < MAX_CONCURRENT) {
@@ -697,29 +697,42 @@ async function fetchKey(key) {
     await _acquireSlot();
     try {
       let attempt = 0;
-      while (attempt < 3) {
+      let rateHit = false;
+      while (attempt < 6) {
         try {
           const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
           if (r.status === 429) {
-            // Rate limit: 指數退避重試
+            rateHit = true;
             attempt++;
-            const wait = 500 * Math.pow(2, attempt) + Math.random() * 400;
-            await _sleep(wait);
+            // 看 server 建議的等待時間
+            const retryAfter = r.headers.get('Retry-After');
+            const wait = (retryAfter ? parseFloat(retryAfter) * 1000 : 1200 * Math.pow(1.5, attempt))
+                         + Math.random() * 400;
+            await _sleep(Math.min(wait, 15000));
             continue;
           }
-          if (!r.ok) return 0;       // 404 = key not found → 0
+          if (r.status === 404) return 0;   // 真的不存在
+          if (!r.ok) { attempt++; await _sleep(800); continue; }
           const j = await r.json();
           if (j.error && j.error.includes('Too many')) {
+            rateHit = true;
             attempt++;
-            await _sleep(1200 + Math.random() * 800);
+            const m = j.error.match(/([\d.]+)s/);
+            const wait = (m ? parseFloat(m[1]) * 1000 : 1500 * Math.pow(1.5, attempt))
+                         + Math.random() * 400;
+            await _sleep(Math.min(wait, 15000));
             continue;
           }
+          if (j.error) return 0;             // Key not found 之類
           return j.value ?? 0;
         } catch(e) {
           attempt++;
-          await _sleep(500);
+          await _sleep(800);
         }
       }
+      // 耗盡重試：從快取移除讓下次可重新嘗試
+      _fetchCache.delete(key);
+      if (rateHit) console.warn('[fetchKey] rate limit exhausted for', key);
       return 0;
     } finally {
       _releaseSlot();
