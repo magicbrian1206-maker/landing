@@ -22,7 +22,7 @@
     return date.getUTCFullYear() + 'W' + _pad(week);
   }
   function _hit(key){
-    fetch(`https://abacus.jasoncameron.dev/hit/${COUNTER_NS}/${key}`, {keepalive: true}).catch(()=>{});
+    fetch(`https://tsann-counter.magicbrian1206.workers.dev/hit/${COUNTER_NS}/${key}`, {keepalive: true}).catch(()=>{});
   }
   function trackClick(label){
     const k = label.toLowerCase();

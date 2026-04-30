@@ -21,7 +21,7 @@ const monthKey = d => `${d.getFullYear()}${pad(d.getMonth()+1)}`;
 
 async function fetchKey(key) {
   try {
-    const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
+    const r = await fetch(`https://tsann-counter.magicbrian1206.workers.dev/get/${NS}/${key}`);
     if (!r.ok) return 0;
     const j = await r.json();
     return j.value ?? 0;

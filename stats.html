@@ -664,85 +664,29 @@ const BRANDS = ['line', 'fb', 'google'];
 const DATA_KEY = { line: 'line', fb: 'facebook', google: 'google' };
 const CIRCS = { line: 659.7, fb: 490.1, google: 320.4 };
 
-// 抓 Abacus 一個 key 的值（不存在回 0）
-// 帶跨元件快取 + 限流 + 429 指數退避重試；失敗不快取
-const _fetchCache = new Map();        // key → promise
-let _activeFetches = 0;
-const MAX_CONCURRENT = 2;             // Abacus rate limit 很嚴，降低併發
-const _waitingQueue = [];
-function _slotAvailable() {
-  if (_waitingQueue.length && _activeFetches < MAX_CONCURRENT) {
-    _activeFetches++;
-    _waitingQueue.shift()();
-  }
-}
-function _acquireSlot() {
-  if (_activeFetches < MAX_CONCURRENT) {
-    _activeFetches++;
-    return Promise.resolve();
-  }
-  return new Promise(resolve => _waitingQueue.push(resolve));
-}
-function _releaseSlot() {
-  _activeFetches--;
-  _slotAvailable();
-}
-function _sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+// 抓計數器一個 key 的值（不存在回 0）
+// Cloudflare Worker 後端，無 rate limit，簡單直接
+const _fetchCache = new Map();
+const API_BASE = 'https://tsann-counter.magicbrian1206.workers.dev';
 
 async function fetchKey(key) {
-  // 跨整頁共用快取，避免重複請求同一 key
   if (_fetchCache.has(key)) return _fetchCache.get(key);
-
   const promise = (async () => {
-    await _acquireSlot();
     try {
-      let attempt = 0;
-      let rateHit = false;
-      while (attempt < 6) {
-        try {
-          const r = await fetch(`https://abacus.jasoncameron.dev/get/${NS}/${key}`);
-          if (r.status === 429) {
-            rateHit = true;
-            attempt++;
-            // 看 server 建議的等待時間
-            const retryAfter = r.headers.get('Retry-After');
-            const wait = (retryAfter ? parseFloat(retryAfter) * 1000 : 1200 * Math.pow(1.5, attempt))
-                         + Math.random() * 400;
-            await _sleep(Math.min(wait, 15000));
-            continue;
-          }
-          if (r.status === 404) return 0;   // 真的不存在
-          if (!r.ok) { attempt++; await _sleep(800); continue; }
-          const j = await r.json();
-          if (j.error && j.error.includes('Too many')) {
-            rateHit = true;
-            attempt++;
-            const m = j.error.match(/([\d.]+)s/);
-            const wait = (m ? parseFloat(m[1]) * 1000 : 1500 * Math.pow(1.5, attempt))
-                         + Math.random() * 400;
-            await _sleep(Math.min(wait, 15000));
-            continue;
-          }
-          if (j.error) return 0;             // Key not found 之類
-          return j.value ?? 0;
-        } catch(e) {
-          attempt++;
-          await _sleep(800);
-        }
-      }
-      // 耗盡重試：從快取移除讓下次可重新嘗試
+      const r = await fetch(`${API_BASE}/get/${NS}/${key}`);
+      if (r.status === 404) return 0;
+      if (!r.ok) return 0;
+      const j = await r.json();
+      if (j.error) return 0;
+      return j.value ?? 0;
+    } catch(e) {
       _fetchCache.delete(key);
-      if (rateHit) console.warn('[fetchKey] rate limit exhausted for', key);
       return 0;
-    } finally {
-      _releaseSlot();
     }
   })();
-
   _fetchCache.set(key, promise);
   return promise;
 }
-// 手動清除共用快取（重新整理時用）
 function clearFetchCache(){ _fetchCache.clear(); }
 
 // 日期工具
