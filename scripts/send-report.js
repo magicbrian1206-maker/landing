@@ -141,7 +141,7 @@ function buildHtmlEmail(r) {
   });
 
   // 4 週聚合
-  const weekly4 = { line: [], fb: [], google: [] };
+  const weekly4 = Object.fromEntries(BRANDS.map(b => [b.key, []]));
   const week4Labels = [];
   for (let w = 0; w < 4; w++) {
     const start = w * 7;
