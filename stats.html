@@ -47,13 +47,20 @@
     .main-grid > div > *:first-child {
       margin-top: 0 !important;
     }
-    /* === 中欄月曆卡撐滿欄高 === */
+    /* === 中欄月曆卡撐滿欄高,網格也跟著長高填滿,不留空白 === */
     .cal-card {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-    .cal-card .cal-detail { margin-top: auto; }   /* 當日明細釘底 */
+    .cal-card .cal-grid {
+      flex: 1;
+      grid-auto-rows: 1fr;          /* 6 列等分剩餘高度,沒空白 */
+    }
+    .cal-card .cal-cell {
+      aspect-ratio: auto;            /* 取消方塊比例,讓行高自由 */
+      min-height: 36px;
+    }
     /* === 右欄趨勢卡撐滿欄高,3 張內卡平分 === */
     .chart-card:has(.rd-trend) {
       flex: 1;
@@ -352,8 +359,8 @@
     border-top: 1px solid rgba(255,255,255,0.08);
   }
   .cal-detail .day-title {
-    font-size: 16px; font-weight: 700;
-    margin-bottom: 6px;
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 10px;
     color: #fff;
   }
   .cal-detail .day-title .badge {
@@ -371,7 +378,7 @@
   }
   .cal-detail .day-row {
     display: flex; align-items: center; gap: 12px;
-    padding: 5px 12px;
+    padding: 9px 12px;
     background: #2c2c2e;
     border-radius: 10px;
     border-left: 3px solid var(--gray-500);
