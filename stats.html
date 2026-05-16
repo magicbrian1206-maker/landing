@@ -47,40 +47,26 @@
     .main-grid > div > *:first-child {
       margin-top: 0 !important;
     }
-    /* === 中欄月曆卡撐滿欄高:格子有高度上限,剩餘空間給「當日明細」 === */
+    /* === 中欄:cal-card 撐滿欄高,內部元件保持自然(slack 由 cal-card 深灰背景吸收) === */
     .cal-card {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
     .cal-card .cal-grid {
-      grid-auto-rows: minmax(38px, 46px);  /* 6 列,每列上限 46px,不會被拉得太長 */
+      grid-auto-rows: minmax(38px, 46px);
     }
     .cal-card .cal-cell {
-      aspect-ratio: auto;                   /* 不再固定方塊比例 */
+      aspect-ratio: auto;
       min-height: 38px;
     }
-    .cal-card .cal-detail {
-      flex: 1;                              /* 剩餘高度給明細區吸收 */
-      display: flex;
-      flex-direction: column;
-    }
-    .cal-card .cal-detail .day-rows {
-      flex: 1;                              /* 3 列明細也跟著長,字才不擠 */
-      gap: 8px;
-    }
-    .cal-card .cal-detail .day-rows .day-row { flex: 1; }
-    /* === 右欄趨勢卡撐滿欄高,3 張內卡平分 === */
+    /* === 右欄:chart-card 撐滿欄高,3 張趨勢卡保持自然(slack 由 chart-card 背景吸收) === */
     .chart-card:has(.rd-trend) {
       flex: 1;
       display: flex;
       flex-direction: column;
     }
-    .chart-card:has(.rd-trend) > .rd-trend {
-      flex: 1;
-      min-height: 0;
-    }
-    /* === 左欄 3 張 stat 小卡保持自然高度(不撐滿,避免內部空白) === */
+    /* === 左欄 3 張 stat 小卡保持自然高度,Excel 緊接 meta 下方 === */
     .stat {
       flex: 0 0 auto;
     }
@@ -739,8 +725,8 @@
 
   <div class="meta" id="meta">資料載入中...</div>
 
-  <!-- ===== Excel 下載(放在左欄底部,用 margin-top:auto 自動填空白) ===== -->
-  <button class="download-btn" style="margin-top: auto;" onclick="exportExcel()">
+  <!-- ===== Excel 下載(緊接 meta 下方,無多餘空白) ===== -->
+  <button class="download-btn" onclick="exportExcel()">
     <span>📊</span><span>下載完整紀錄 Excel</span>
   </button>
 
