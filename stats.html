@@ -34,9 +34,9 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      align-items: start;       /* 不再強制等高,每欄各自自然高度、頂端對齊 */
+      align-items: stretch;     /* 三欄等高(撐到最高那欄,通常是中欄月曆) */
     }
-    /* 每欄仍是 flex column,方便內部排版 */
+    /* 每欄是 flex column,讓裡面的卡片可以 flex:1 撐滿 */
     .main-grid > div {
       display: flex;
       flex-direction: column;
@@ -46,6 +46,28 @@
     /* 每一欄的「第一張卡」上方對齊（移除預設 margin-top） */
     .main-grid > div > *:first-child {
       margin-top: 0 !important;
+    }
+    /* === 中欄月曆卡撐滿欄高 === */
+    .cal-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .cal-card .cal-detail { margin-top: auto; }   /* 當日明細釘底 */
+    /* === 右欄趨勢卡撐滿欄高,3 張內卡平分 === */
+    .chart-card:has(.rd-trend) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .chart-card:has(.rd-trend) > .rd-trend {
+      flex: 1;
+      min-height: 0;
+    }
+    /* === 左欄 3 張 stat 小卡自動長高填滿剩餘空間 === */
+    .stat {
+      flex: 1;
+      min-height: 0;
     }
   }
   /* ===== 寬螢幕三欄佈局（>= 1280px） ===== */
