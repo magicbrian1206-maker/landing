@@ -34,7 +34,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      align-items: stretch;     /* 各欄等高(撐到最高那欄) */
+      align-items: start;       /* 各欄自然高(右欄高度由 JS syncColumnHeights 同步) */
     }
     /* 只有「欄位 div」變 flex column,排除 full-width 的 tabs / header 等元素 */
     .main-grid > div:not(.full-width) {
@@ -47,12 +47,12 @@
     .main-grid > div > *:first-child {
       margin-top: 0 !important;
     }
-    /* 真實數據卡 (.rd-card) 撐滿欄位剩餘空間,3 張內卡用 Grid 平分 */
+    /* 真實數據卡 (.rd-card):高度由 JS 動態設定,內部 3 卡用 Grid 平分 */
     .rd-card {
-      flex: 1;
       display: grid;
       grid-template-rows: auto 1fr 1fr 1fr;
       gap: 12px;
+      overflow: hidden;          /* 避免內容溢出 */
     }
     .rd-card > .rd-trend {
       margin-top: 0 !important;
@@ -1341,7 +1341,56 @@ async function renderExternalCharts() {
   } catch (e) {
     console.warn('[renderExternalCharts] failed:', e);
   }
+  // 渲染完高度可能變,馬上同步一次
+  syncColumnHeights();
 }
+
+// === 動態同步右欄高度 = 左欄(以左欄為基準,3 卡平分) ===
+function syncColumnHeights() {
+  // 桌面才需要,< 900px 是單欄堆疊
+  if (window.innerWidth < 900) {
+    const rd = document.querySelector('.rd-card');
+    if (rd) rd.style.height = '';
+    return;
+  }
+  const cols = document.querySelectorAll('.main-grid > div:not(.full-width)');
+  const rdCard = document.querySelector('.rd-card');
+  if (!cols.length || !rdCard) return;
+
+  // 左欄 = 第 1 個非 full-width 欄
+  const leftCol = cols[0];
+  const rightCol = rdCard.parentElement;
+  if (!leftCol || !rightCol) return;
+
+  // 先把 rd-card 高度釋放,讓右欄自然高度被瀏覽器算出
+  rdCard.style.height = 'auto';
+
+  // 量左欄自然高度
+  const leftH = leftCol.offsetHeight;
+
+  // 量右欄裡 rd-card 以外的元素總高度 (Excel 按鈕 + margin)
+  let otherH = 0;
+  for (const child of rightCol.children) {
+    if (child !== rdCard) {
+      const cs = getComputedStyle(child);
+      otherH += child.offsetHeight + parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+    }
+  }
+  // rd-card 自己的 margin
+  const rdCs = getComputedStyle(rdCard);
+  const rdMarg = parseFloat(rdCs.marginTop) + parseFloat(rdCs.marginBottom);
+
+  const target = leftH - otherH - rdMarg;
+  if (target > 200) {  // 至少給點空間
+    rdCard.style.height = target + 'px';
+  }
+}
+
+// 視窗變更 / 滾動條出現等都要重新算
+window.addEventListener('resize', () => {
+  clearTimeout(syncColumnHeights._t);
+  syncColumnHeights._t = setTimeout(syncColumnHeights, 100);
+});
 
 // =============== Excel 匯出 ===============
 async function exportExcel(){
