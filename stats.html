@@ -60,11 +60,15 @@
       aspect-ratio: auto;
       min-height: 38px;
     }
-    /* === 右欄:chart-card 撐滿欄高,3 張趨勢卡保持自然(slack 由 chart-card 背景吸收) === */
+    /* === 右欄:chart-card 撐滿欄高,3 張趨勢卡 flex:1 均分填滿(避免下方深灰空白) === */
     .chart-card:has(.rd-trend) {
       flex: 1;
       display: flex;
       flex-direction: column;
+    }
+    .chart-card:has(.rd-trend) > .rd-trend {
+      flex: 1;
+      min-height: 0;
     }
     /* === 左欄 3 張 stat 小卡保持自然高度,Excel 緊接 meta 下方 === */
     .stat {
@@ -419,12 +423,12 @@
 
   /* ===== 真實數據趨勢卡 (rd-trend) ===== */
   .rd-trend {
-    margin-top: 14px;
-    padding: 14px;
+    margin-top: 10px;
+    padding: 10px 12px;
     background: #1c1c1e;
     border-radius: 12px;
     border-left: 3px solid;
-    min-height: 150px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
   }
