@@ -34,10 +34,10 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      align-items: stretch;     /* 各欄一律拉到最高(等高) */
+      align-items: stretch;     /* 各欄等高(撐到最高那欄) */
     }
-    /* 只有「欄位 div」變 flex column,排除 full-width 的 tabs / header 等元素 */
-    .main-grid > div:not(.full-width) {
+    /* 每欄變成 flex column,讓裡面的卡片可以 flex:1 撐滿 */
+    .main-grid > div {
       display: flex;
       flex-direction: column;
     }
@@ -47,18 +47,19 @@
     .main-grid > div > *:first-child {
       margin-top: 0 !important;
     }
-    /* 真實數據卡 (.rd-card):flex:1 撐滿欄位剩餘空間,內部 3 卡 Grid 平分 */
-    .rd-card {
+    /* 含有 .rd-trend 子元素的 chart-card 撐滿剩餘空間,3 張卡平分 */
+    .chart-card:has(.rd-trend) {
       flex: 1;
-      display: grid;
-      grid-template-rows: auto 1fr 1fr 1fr;
-      gap: 12px;
-      min-height: 0;             /* 允許收縮 */
+      display: flex;
+      flex-direction: column;
     }
-    .rd-card > .rd-trend {
-      margin-top: 0 !important;
-      min-height: 0;
+    .chart-card:has(.rd-trend) > .rd-trend {
+      flex: 1;
+      min-height: 0;            /* 取消之前的 min-height 限制,讓 flex 自由分配 */
     }
+    /* 中欄月曆卡撐滿欄高,讓三欄視覺等高 */
+    .cal-card { flex: 1; display: flex; flex-direction: column; }
+    .cal-card .cal-detail { margin-top: auto; }
   }
   /* ===== 寬螢幕三欄佈局（>= 1280px） ===== */
   @media (min-width: 1280px) {
@@ -767,7 +768,7 @@
     <div>
 
   <!-- ===== 真實數據趨勢 (取代舊熱力圖+折線圖) ===== -->
-  <div class="chart-card rd-card">
+  <div class="chart-card">
     <h3><span class="icon">📡</span>真實數據趨勢</h3>
 
     <div class="rd-trend line">
@@ -801,12 +802,12 @@
     </div>
   </div>
 
-  <!-- ===== Excel 下載 ===== -->
-  <button class="download-btn" onclick="exportExcel()">
-    <span>📊</span><span>下載完整紀錄 Excel</span>
-  </button>
-
     </div>  <!-- 右欄結束 -->
+
+    <!-- ===== Excel 下載(全寬,不在任何欄裡) ===== -->
+    <button class="download-btn full-width" onclick="exportExcel()">
+      <span>📊</span><span>下載完整紀錄 Excel</span>
+    </button>
 
   </div>  <!-- main-grid 結束 -->
 
