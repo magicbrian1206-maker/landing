@@ -739,6 +739,11 @@
 
   <div class="meta" id="meta">資料載入中...</div>
 
+  <!-- ===== Excel 下載(放在左欄底部,用 margin-top:auto 自動填空白) ===== -->
+  <button class="download-btn" style="margin-top: auto;" onclick="exportExcel()">
+    <span>📊</span><span>下載完整紀錄 Excel</span>
+  </button>
+
     </div>  <!-- 左欄結束 -->
 
     <!-- ============ 中欄：月曆 + 折線圖 ============ -->
@@ -827,11 +832,6 @@
   </div>
 
     </div>  <!-- 右欄結束 -->
-
-    <!-- ===== Excel 下載(全寬,不在任何欄裡) ===== -->
-    <button class="download-btn full-width" onclick="exportExcel()">
-      <span>📊</span><span>下載完整紀錄 Excel</span>
-    </button>
 
   </div>  <!-- main-grid 結束 -->
 
