@@ -140,7 +140,8 @@
   .day-title .wk { color: var(--text-2); font-weight: 500; margin-left: 4px; font-size: 13px; }
   .day-title .badge { font-size: 11px; background: var(--yellow); color: #000; padding: 2px 6px; border-radius: 5px; margin-left: 6px; vertical-align: 2px; }
   .day-tbl td { padding: 7px 4px; }
-  .day-tbl td.nm { display: flex; align-items: center; gap: 8px; color: var(--text-2); }
+  .day-tbl td.nm { color: var(--text-2); }
+  .day-tbl td.nm .dot { margin-right: 8px; vertical-align: 1px; }
 
   footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
   footer .meta { font-size: 12px; color: var(--text-2); }
@@ -244,7 +245,7 @@ const NS = 'tsann-kuen-appleshop';
 // 產生器會依店家選擇改這一行；預設 api = 打自己的 /external 端點
 const REAL_DATA_MODE = 'api';   /*__REAL_DATA_MODE__*/
 const API_BASE = 'https://tsann-counter.magicbrian1206.workers.dev';
-const SINCE_YMD = '20260527';   // 真實數據開始自動累積日（累計的起點）
+const SINCE_YMD = '20260516';   // 累計起點：三平台統一從 5/16 起算（FB 接上日）
 const BRANDS = ['line', 'fb', 'google'];
 // 計數器資料鍵：fb 用 'facebook'（Worker 鍵長度需 ≥3）
 const DATA_KEY = { line: 'line', fb: 'facebook', google: 'google' };
@@ -416,6 +417,12 @@ async function actualSince(b, startYmd) {
     const v = await snapAt(b, d);
     if (v != null) return { value: EXT[b].current - v, base: d, baseValue: v, clamped };
   }
+  // manual 模式：店家各自開始記錄的日期不同，找不到就改用期間內最早一筆快照
+  if (REAL_DATA_MODE === 'manual') {
+    const base0 = clamped ? SINCE_YMD : addDays(startYmd, -1);
+    const h = (EXT[b].history || []).filter(x => x.date >= base0 && x.date < end).pop();   // history 最新在前 → pop 取最早
+    if (h) return { value: EXT[b].current - h.value, base: h.date, baseValue: h.value, clamped: true };
+  }
   return null;
 }
 
@@ -560,7 +567,9 @@ async function renderCompare() {
 
   // 說明：基準日、LINE 隔日結算、起點限制
   const notes = [];
-  if (actuals.some(a => a && a.clamped)) notes.push(`真實數據自 ${fmtMD(SINCE_YMD)} 起才有紀錄，此期間的實際加入從 ${fmtMD(SINCE_YMD)} 起算。`);
+  const late = BRANDS.map((b, i) => [b, actuals[i]]).filter(([b, a]) => a && a.base > addDays(start, -1));
+  if (late.length) notes.push('以下平台在此期間開始時還沒有紀錄，改從最早一筆起算：'
+    + late.map(([b, a]) => `${META[b].name} ${fmtMD(a.base)}`).join('、') + '。');
   if (REAL_DATA_MODE === 'api' && extOk('line') && asOf('line') < start) notes.push(`LINE 好友數隔天才結算（目前截至 ${fmtMD(asOf('line'))}），今日數字明天顯示。`);
   notes.push('實際加入含非落地頁來源（例如店內直接加好友），比例僅供參考。');
   document.getElementById('cmp-foot').innerHTML = notes.join('<br>');
