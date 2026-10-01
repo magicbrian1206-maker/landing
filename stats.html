@@ -707,7 +707,10 @@ async function exportExcel() {
 }
 
 // =============== 啟動 ===============
-if (REAL_DATA_MODE === 'off') document.body.classList.add('mode-off');
+if (REAL_DATA_MODE === 'off') {
+  document.body.classList.add('mode-off');
+  document.querySelectorAll('th[colspan="2"]').forEach(th => th.colSpan = 1);   // 只剩點擊一欄
+}
 (function init() {
   const t = new Date();
   calYear = t.getFullYear(); calMonth = t.getMonth(); selectedDate = t;
